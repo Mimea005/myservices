@@ -4,6 +4,7 @@ import (
 	"flag"
 	"myservices/common"
 	"myservices/handlers"
+	"myservices/handlers/api"
 	"myservices/logging"
 	"myservices/middleware"
 	"net"
@@ -18,6 +19,10 @@ func main() {
 	common.Log.Println("Start")
 
 	router := mux.NewRouter()
+	router.Use(middleware.LogRequests)
+
+	// Register routes in api package
+	api.ConfigureRoutes(router.PathPrefix("/x").Subrouter())
 
 	router.HandleFunc("/health", handlers.Health)
 
@@ -26,8 +31,6 @@ func main() {
 		handlers.Log.Println("Not found")
 		http.NotFound(w, r)
 	}).GetHandler()
-
-	router.Use(middleware.LogRequests)
 
 	if l, err := net.Listen("tcp", common.Config.BindAddress); err != nil {
 		common.Log.Fatal(err.Error())

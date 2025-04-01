@@ -1,23 +1,23 @@
 package api
 
 import (
+	"bytes"
 	"myservices/handlers"
 	"myservices/middleware"
+	"myservices/router"
 	"myservices/services"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
 // Subrouter for all api endpoints (except for /health (at least for now))
-func ConfigureRoutes(r *mux.Router) {
+var ApiRouter = router.NewRouter()
 
-	// Make sure all repsonses under this router are answered as html content
-	r.Use(middleware.ContentHtml)
+func init() {
+	ApiRouter.UseMiddleware(middleware.ContentType("text/html"))
 
-	r.HandleFunc("/ping", ping)
-	r.HandleFunc("/services", listServices)
+	ApiRouter.HandleFunc("GET /ping", ping)
 }
+
 
 func ping(w http.ResponseWriter, r *http.Request) {
 	handlers.Log.Println("Pinged")
@@ -32,6 +32,4 @@ func ping(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.Write(buff.Bytes())
 	}
-
 }
-

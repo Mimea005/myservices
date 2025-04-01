@@ -7,10 +7,9 @@ import (
 	"myservices/handlers/api"
 	"myservices/logging"
 	"myservices/middleware"
+	"myservices/router"
 	"net"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -18,19 +17,18 @@ func main() {
 	logging.ConfigureLogging()
 	common.Log.Println("Start")
 
-	router := mux.NewRouter()
-	router.Use(middleware.LogRequests)
+	router := router.NewRouter()
+	router.UseMiddleware(middleware.LogRequests)
 
 	// Register routes in api package
-	api.ConfigureRoutes(router.PathPrefix("/x").Subrouter())
+	router.OnSubPath("/x/", api.ApiRouter)
 
-	router.HandleFunc("/health", handlers.Health)
+	router.HandleFunc("GET /health", handlers.Health)
 
-	// Add a handler to log requests not matched
-	router.NotFoundHandler = router.NewRoute().HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		handlers.Log.Println("Not found")
-		http.NotFound(w, r)
-	}).GetHandler()
+	// Default handler to return not found
+	router.HandleFunc("/", http.NotFound)
+
+
 
 	if l, err := net.Listen("tcp", common.Config.BindAddress); err != nil {
 		common.Log.Fatal(err.Error())

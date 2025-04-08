@@ -1,7 +1,7 @@
 package router
 
 import (
-	"myservices/common"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -29,7 +29,7 @@ func (r *Router) OnSubPath(path string, handler http.Handler) {
 	pathSlice := strings.Split(path, "/")
 	pathSlice = pathSlice[:len(pathSlice)-1]
 	prefix := strings.Join(pathSlice, "/")
-	common.Log.Printf("Prefix: %s", prefix)
+	log.Printf("Prefix: %s", prefix)
 	r.Handle(path, http.StripPrefix(prefix, handler))
 }
 

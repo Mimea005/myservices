@@ -2,16 +2,18 @@ package logging
 
 import (
 	"io"
-	"myservices/common"
+	"log"
+	"myservices/config"
 	"myservices/handlers"
 	"myservices/middleware"
 	"myservices/services"
 	"os"
 )
 
-func ConfigureLogging() {
 
-	for _, filter := range common.Config.LogFilters {
+// Configure outputstreams for different log scopes 
+func Configure(config config.Server) {
+	for _, filter := range config.LogFilters {
 		switch filter {
 		case "handler":
 			handlers.Log.SetOutput(os.Stderr)
@@ -21,9 +23,8 @@ func ConfigureLogging() {
 		case "router":
 			middleware.RouterLog.SetOutput(os.Stderr)
 		case "-info":
-			common.Log.SetOutput(io.Discard)
+			log.Default().SetOutput(io.Discard)
 		default:
 		}
 	}
-
 }

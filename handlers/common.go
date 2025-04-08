@@ -3,7 +3,7 @@ package handlers
 import (
 	"io"
 	"log"
-	"myservices/common"
+	"myservices/config"
 )
 
-var Log = log.New(io.Discard, "[handler]: ", common.LogFlags)
+var Log = log.New(io.Discard, "[handler]: ", config.LogFlags)

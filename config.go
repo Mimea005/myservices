@@ -1,18 +1,12 @@
-package common
+package main
 
 import (
 	"flag"
+	"myservices/config"
 )
 
-type serverConfig struct {
-	BindAddress string
-	LogFilters Filters
-	CoolifyURL string
-	CoolifyToken string
-}
-
 // Runtime configuration variables. Currently set as arguments
-var Config = serverConfig{
+var Config = config.Server {
 	BindAddress: "",
 	LogFilters: []string{"handler", "service", "router"},
 	CoolifyURL: "",
@@ -25,4 +19,3 @@ func init() {
 	flag.StringVar(&Config.CoolifyURL, "coolify-url", "", "coolify url")
 	flag.StringVar(&Config.CoolifyToken, "coolify-token", "", "Bearer token for coolify")
 }
-

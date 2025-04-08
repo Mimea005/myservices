@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"myservices/common"
+	"log"
 	"myservices/handlers"
 	"myservices/handlers/api"
 	"myservices/logging"
@@ -14,8 +14,8 @@ import (
 
 func main() {
 	flag.Parse()
-	logging.ConfigureLogging()
-	common.Log.Println("Start")
+	logging.Configure(Config)
+	log.Println("Start")
 
 	router := router.NewRouter()
 	router.UseMiddleware(middleware.LogRequests)
@@ -30,10 +30,10 @@ func main() {
 
 
 
-	if l, err := net.Listen("tcp", common.Config.BindAddress); err != nil {
-		common.Log.Fatal(err.Error())
+	if l, err := net.Listen("tcp", Config.BindAddress); err != nil {
+		log.Fatal(err.Error())
 	} else {
-		common.Log.Println("Serving on: " + common.Config.BindAddress)
-		common.Log.Fatal(http.Serve(l, router))
+		log.Println("Serving on: " + Config.BindAddress)
+		log.Fatal(http.Serve(l, router))
 	}
 }

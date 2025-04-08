@@ -3,7 +3,7 @@ package services
 import (
 	"io"
 	"log"
-	"myservices/common"
+	"myservices/config"
 )
 
-var Log = log.New(io.Discard, "[service]: ", common.LogFlags)
+var Log = log.New(io.Discard, "[service]: ", config.LogFlags)

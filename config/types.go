@@ -1,11 +1,10 @@
-package common
+package config
 
 import (
 	"fmt"
-	"log"
-	"os"
 	"strings"
 )
+
 
 type Filters []string
 
@@ -23,8 +22,9 @@ func (l *Filters) Set(value string) error {
 	return nil
 }
 
-// Common logging format for server
-const LogFlags = log.Lmsgprefix | log.LstdFlags
-
-// For logging non debug info
-var Log = log.New(os.Stdout, "[ ]: ", LogFlags)
+type Server struct {
+	BindAddress string
+	LogFilters Filters
+	CoolifyURL string
+	CoolifyToken string
+}
